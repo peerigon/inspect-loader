@@ -146,22 +146,3 @@ test("should also work with webpack's loader context", t => {
             t.is(inspect.options, options);
         });
 });
-
-test("should be possible to make a raw loader", t => {
-    const options = {
-        callback(i) {
-            inspect = i;
-        }
-    };
-    let inspect;
-
-    t.plan(1);
-
-    return compile([{
-        loader: require.resolve("./fixtures/rawInspectLoader.js"),
-        options
-    }])
-        .then(() => {
-            t.true(inspect.arguments[0] instanceof Buffer);
-        });
-});
