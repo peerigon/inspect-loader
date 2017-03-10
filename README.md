@@ -51,7 +51,7 @@ webpack({
 });
 ```
 
-The loader returns the received arguments, which means that you can place the **inspect-loader** in the middle of your loader pipeline. You can even have inspect multiple loaders:
+The loader returns the received arguments, which means that you can place the **inspect-loader** in the middle of your loader pipeline. You can even inspect multiple loaders:
 
 ```js
 webpack({
