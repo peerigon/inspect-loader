@@ -29,6 +29,7 @@
   "homepage": "https://github.com/peerigon/inspect-loader#readme",
   "files": [
     "lib",
+    "raw.js",
     "README.md",
     "LICENSE"
   ],
