@@ -26,7 +26,7 @@ npm install --save-dev inspect-loader
 
 <h2 align="center">Example</h2>
 
-Put the `inspect-loader` in front of the loader you want to test and pass in a callback function. The callback function will be called with useful information about the given inputs (`arguments`). It also exposes the internal loader context for further inspection:
+Put the **inspect-loader** in front of the loader you want to test and pass in a callback function. The callback function will be called with useful information about the given inputs (`arguments`). It also exposes the internal loader context for further inspection:
 
 ```js
 webpack({
@@ -51,6 +51,30 @@ webpack({
 });
 ```
 
+The loader returns the received arguments, which means that you can place the **inspect-loader** in the middle of your loader pipeline. You can even have inspect multiple loaders:
+
+```js
+webpack({
+    ...
+            use: [{
+                loader: "inspect-loader",
+                options: {
+                    callback: inspectALoader
+                }
+            }, {
+                loader: "a-loader"
+            }, {
+                loader: "inspect-loader",
+                options: {
+                    callback: inspectBLoader
+                }
+            }, {
+                loader: "b-loader"
+            }]
+    ...
+});
+```
+
 ### Raw
 
 This package exposes also a raw version that can be used to test [raw loaders](https://webpack.js.org/api/loaders/#-raw-loader):
@@ -69,7 +93,7 @@ webpack({
                     }
                 }
             }, {
-                loader: "my-raw-loader" // loader that you want to test/debug
+                loader: "my-raw-loader" // raw loader that you want to test/debug
             }]
         }]
     }
@@ -80,7 +104,7 @@ webpack({
 
 ### `callback: Function | string`
 
-Can be a `Function` (preferred) or a `string`. In case it's a string, it is treated as a string reference and tried to invoked on the `inspectLoader.callbacks` object like this:
+Can be a `Function` (preferred) or a `string`. In case it's a string, it is treated as a string reference and will be invoked on the `inspectLoader.callbacks` object like this:
 
 ```js
 const inspectLoader = require("inspect-loader");
@@ -116,7 +140,7 @@ function callback(inspect) {
 }
 ```
 
-**Please note:** `context` and `options` are *not* references to the `loaderContext` of the loader you want to test. They just expose the internal state of the `inspect-loader`. However, this is useful if you have multiple callbacks and you want to find out which resource or loader pipeline has been invoked.
+**Please note:** `context` and `options` are *not* references to the `loaderContext` of the loader you want to test. They just expose the internal state of the **inspect-loader**. This is useful if you have multiple callbacks and you want to find out which resource or loader pipeline has been invoked.
 
 <h2 align="center">License</h2>
 Unlicense
