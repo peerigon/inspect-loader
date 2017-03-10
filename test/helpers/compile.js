@@ -1,7 +1,7 @@
 import { resolve } from "path";
 import webpack from "webpack";
 
-export default function compile(loaderOptions) {
+export default function compile(loaderPipeline) {
     return new Promise((res, rej) => {
         webpack({
             entry: require.resolve("../fixtures/entry.js"),
@@ -13,12 +13,7 @@ export default function compile(loaderOptions) {
                 rules: [
                     {
                         test: /\.js$/,
-                        use: [
-                            {
-                                loader: require.resolve("../../lib/loader.js"),
-                                options: loaderOptions
-                            }
-                        ]
+                        use: loaderPipeline
                     }
                 ]
             }

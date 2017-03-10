@@ -5,7 +5,8 @@ import webpack from "webpack";
 import inspectLoader from "../lib/loader";
 import compile from "./helpers/compile";
 
-const entryContent = readFileSync(require.resolve("./fixtures/entry.js"), "utf8");
+const entryContent = readFileSync(require.resolve("./fixtures/entry"), "utf8");
+const pathToInspectLoader = require.resolve("../lib/loader");
 
 /**
  * Applies dummy properties that must be defined on the context.
@@ -131,7 +132,10 @@ test("should also work with webpack's loader context", t => {
 
     t.plan(5);
 
-    return compile(options)
+    return compile([{
+        loader: pathToInspectLoader,
+        options
+    }])
         .then(() => {
             t.truthy(inspect.arguments);
             t.deepEqual(inspect.arguments, [entryContent]);
@@ -140,5 +144,24 @@ test("should also work with webpack's loader context", t => {
             t.truthy(inspect.context.resourcePath);
 
             t.is(inspect.options, options);
+        });
+});
+
+test("should be possible to make a raw loader", t => {
+    const options = {
+        callback(i) {
+            inspect = i;
+        }
+    };
+    let inspect;
+
+    t.plan(1);
+
+    return compile([{
+        loader: require.resolve("./fixtures/rawInspectLoader.js"),
+        options
+    }])
+        .then(() => {
+            t.true(inspect.arguments[0] instanceof Buffer);
         });
 });
