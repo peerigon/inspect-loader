@@ -18,6 +18,9 @@
     "testing",
     "debug"
   ],
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "author": "developers@peerigon.com",
   "license": "Unlicense",
   "bugs": {
