@@ -123,12 +123,12 @@ test("should throw a descriptive TypeError if an unknown callback string ref was
 });
 
 test("should also work with webpack's loader context", t => {
+    let inspect;
     const options = {
         callback(i) {
             inspect = i;
         }
     };
-    let inspect;
 
     t.plan(5);
 
@@ -144,5 +144,46 @@ test("should also work with webpack's loader context", t => {
             t.truthy(inspect.context.resourcePath);
 
             t.is(inspect.options, options);
+        });
+});
+
+test("should be possible to inspect multiple times", t => {
+    const loaderIndices = [];
+    let inspect1;
+    let inspect2;
+    let inspect3;
+    const options = [{
+        callback(i) {
+            inspect1 = i;
+            loaderIndices[0] = i.context.loaderIndex;
+        }
+    }, {
+        callback(i) {
+            inspect2 = i;
+            loaderIndices[1] = i.context.loaderIndex;
+        }
+    }, {
+        callback(i) {
+            inspect3 = i;
+            loaderIndices[2] = i.context.loaderIndex;
+        }
+    }];
+
+    t.plan(1 + options.length * 4);
+
+    return compile(options.map(options => ({
+        loader: pathToInspectLoader,
+        options
+    })))
+        .then(() => {
+            t.deepEqual(loaderIndices, [0, 1, 2]);
+            [inspect1, inspect2, inspect3].forEach((inspect, i) => {
+                t.truthy(inspect.arguments);
+                t.deepEqual(inspect.arguments, [entryContent]);
+
+                t.truthy(inspect.context);
+
+                t.is(inspect.options, options[i]);
+            });
         });
 });

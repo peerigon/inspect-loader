@@ -4,12 +4,12 @@ import rawInspectLoader from "../raw";
 import inspectLoader from "../lib/loader";
 
 test("should work the same as the inspect-loader just for buffers", t => {
+    let inspect;
     const options = {
         callback(i) {
             inspect = i;
         }
     };
-    let inspect;
 
     t.plan(1);
 
