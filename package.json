@@ -1,0 +1,39 @@
+{
+  "name": "inspect-loader",
+  "version": "1.0.0",
+  "description": "Webpack loader designed for loader testing. Calls a function with the received input.",
+  "main": "lib/loader.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peerigon/inspect-loader.git"
+  },
+  "keywords": [
+    "webpack",
+    "loader",
+    "test",
+    "testing",
+    "debug"
+  ],
+  "author": "developers@peerigon.com",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/peerigon/inspect-loader/issues"
+  },
+  "homepage": "https://github.com/peerigon/inspect-loader#readme",
+  "files": [
+    "lib",
+    "README.md",
+    "LICENSE"
+  ],
+  "devDependencies": {
+    "ava": "^0.18.2",
+    "eslint": "^3.17.1",
+    "eslint-config-peerigon": "^9.0.0",
+    "eslint-plugin-jsdoc": "^2.4.0",
+    "nyc": "^10.1.2",
+    "webpack": "^2.2.1"
+  }
+}

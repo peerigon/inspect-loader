@@ -1,0 +1,16 @@
+{
+    "reporter": [
+        "lcov",
+        "text"
+    ],
+    "include": [
+        "lib/**/*.js"
+    ],
+    "lines": 95,
+    "statements": 95,
+    "functions": 95,
+    "branches": 95,
+    "check-coverage": true,
+    "sourceMap": false,
+    "instrument": false
+}
