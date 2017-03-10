@@ -6,11 +6,9 @@
     "include": [
         "lib/**/*.js"
     ],
-    "lines": 95,
-    "statements": 95,
-    "functions": 95,
-    "branches": 95,
-    "check-coverage": true,
-    "sourceMap": false,
-    "instrument": false
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "check-coverage": true
 }

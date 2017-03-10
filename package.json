@@ -1,10 +1,11 @@
 {
   "name": "inspect-loader",
   "version": "1.0.0",
-  "description": "Webpack loader designed for loader testing. Calls a function with the received input.",
+  "description": "Webpack loader designed for loader testing and debugging. Calls a function with the received input.",
   "main": "lib/loader.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nyc ava",
+    "lint": "eslint --ignore-path .gitignore lib test"
   },
   "repository": {
     "type": "git",
@@ -35,5 +36,8 @@
     "eslint-plugin-jsdoc": "^2.4.0",
     "nyc": "^10.1.2",
     "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "loader-utils": "^1.0.3"
   }
 }
