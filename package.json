@@ -5,6 +5,7 @@
   "main": "lib/loader.js",
   "scripts": {
     "test": "nyc ava",
+    "posttest": "npm run lint",
     "lint": "eslint --ignore-path .gitignore lib test"
   },
   "repository": {
