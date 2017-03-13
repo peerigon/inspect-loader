@@ -1,7 +1,5 @@
-import { resolve } from "path";
 import { readFileSync } from "fs";
 import test from "ava";
-import webpack from "webpack";
 import inspectLoader from "../lib/loader";
 import compile from "./helpers/compile";
 
