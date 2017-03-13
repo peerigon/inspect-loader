@@ -142,6 +142,47 @@ function callback(inspect) {
 
 **Please note:** `context` and `options` are *not* references to the `loaderContext` of the loader you want to test. They just expose the internal state of the **inspect-loader**. This is useful if you have multiple callbacks and you want to find out which resource or loader pipeline has been invoked.
 
+<h2 align="center">Usage</h2>
+
+### Assertions
+
+Most of the time, you will probably want to do assertions on the `inspect` object. It is recommended to do this *after* the webpack compilation has finished, because otherwise the assertion error will be caught by webpack and reported as `Module build error`.
+
+Not so good:
+
+```js
+    ...
+    loader: "inspect-loader",
+    options: {
+        callback(inspect) {
+            // assertion errors will be caught as Module build error
+            assert.deepEqual(inspect.arguments, [...])
+        }
+    }
+    ...
+```
+
+Better:
+
+```js
+let args;
+
+webpack({
+    ...
+    loader: "inspect-loader",
+    options: {
+        callback(inspect) {
+            args = inspect.arguments;
+        }
+    }
+    ...
+}, (err, stats) => {
+    ...
+    assert.deepEqual(args, [...])
+});
+    
+```
+
 <h2 align="center">License</h2>
 Unlicense
 
