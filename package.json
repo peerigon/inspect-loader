@@ -1,6 +1,6 @@
 {
   "name": "inspect-loader",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Webpack loader designed for loader testing and debugging. Calls a function with the received input.",
   "main": "lib/loader.cjs",
   "type": "module",
