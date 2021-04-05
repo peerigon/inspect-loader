@@ -5,9 +5,5 @@
     "env": {
         "node": true
     },
-    "root": true,
-    "rules": {
-        // Can be removed as soon as the eslint-config-peerigon/node rules are used
-        "prefer-spread": "off"
-    }
+    "root": true
 }

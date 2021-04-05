@@ -2,11 +2,12 @@
   "name": "inspect-loader",
   "version": "1.0.0",
   "description": "Webpack loader designed for loader testing and debugging. Calls a function with the received input.",
-  "main": "lib/loader.js",
+  "main": "lib/loader.cjs",
+  "type": "module",
   "scripts": {
     "test": "nyc ava",
     "posttest": "npm run lint",
-    "lint": "eslint --ignore-path .gitignore lib test"
+    "lint": "eslint --ignore-path .gitignore lib test --ext js,cjs"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,7 @@
     "debug"
   ],
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=14.0.0"
   },
   "author": "developers@peerigon.com",
   "license": "Unlicense",
@@ -35,14 +36,14 @@
     "LICENSE"
   ],
   "devDependencies": {
-    "ava": "^0.18.2",
-    "eslint": "^3.17.1",
-    "eslint-config-peerigon": "^9.0.0",
-    "eslint-plugin-jsdoc": "^2.4.0",
-    "nyc": "^10.1.2",
-    "webpack": "^2.2.1"
+    "ava": "^3.15.0",
+    "eslint": "^7.23.0",
+    "eslint-config-peerigon": "^30.0.2",
+    "eslint-plugin-jsdoc": "^32.3.0",
+    "nyc": "^15.1.0",
+    "webpack": "^5.30.0"
   },
   "dependencies": {
-    "loader-utils": "^1.0.3"
+    "loader-utils": "^2.0.0"
   }
 }

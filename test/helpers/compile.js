@@ -1,39 +1,43 @@
-import { resolve } from "path";
+import * as path from "path";
+import * as url from "url";
 import webpack from "webpack";
 
+const dirname = path.dirname(url.fileURLToPath(import.meta.url));
+
 export default function compile(loaderPipeline) {
-    return new Promise((res, rej) => {
+    return new Promise((resolve, reject) => {
         webpack({
-            entry: require.resolve("../fixtures/entry.js"),
+            mode: "none",
+            entry: path.resolve(dirname, "../fixtures/entry.js"),
             output: {
-                path: resolve(__dirname, "..", "output"),
-                filename: "bundle" // omitting js because we don't want to trigger ava in watch mode
+                path: path.resolve(dirname, "..", "output"),
+                filename: "bundle", // omitting js because we don't want to trigger ava in watch mode
             },
             module: {
                 rules: [
                     {
                         test: /\.js$/,
-                        use: loaderPipeline
-                    }
-                ]
-            }
-        }, (err, stats) => {
-            const problem = err || stats.compilation.errors[0] || stats.compilation.warnings[0];
+                        use: loaderPipeline,
+                    },
+                ],
+            },
+        }, (error, stats) => {
+            const problem = error || stats.compilation.errors[0] || stats.compilation.warnings[0];
 
             if (problem) {
                 const error = problem.message ?
                     problem :
                     new Error(typeof problem === "string" ? problem : "Unexpected error");
 
-                error.originalError = err;
+                error.originalError = error;
                 error.stats = stats;
 
-                rej(error);
+                reject(error);
 
                 return;
             }
 
-            res(stats);
+            resolve(stats);
         });
     });
 }

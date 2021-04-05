@@ -1,10 +1,13 @@
+import * as path from "path";
+import * as url from "url";
 import { readFileSync } from "fs";
 import test from "ava";
-import inspectLoader from "../lib/loader";
-import compile from "./helpers/compile";
+import inspectLoader from "../lib/loader.cjs";
+import compile from "./helpers/compile.js";
 
-const entryContent = readFileSync(require.resolve("./fixtures/entry"), "utf8");
-const pathToInspectLoader = require.resolve("../lib/loader");
+const dirname = path.dirname(url.fileURLToPath(import.meta.url));
+const entryContent = readFileSync(path.resolve(dirname, "./fixtures/entry.js"), "utf8");
+const pathToInspectLoader = path.resolve(dirname, "../lib/loader.cjs");
 
 /**
  * Applies dummy properties that must be defined on the context.
@@ -24,8 +27,8 @@ test("should call the query callback synchronously", t => {
         query: {
             callback() {
                 called = true;
-            }
-        }
+            },
+        },
     });
 
     inspectLoader.call(context);
@@ -37,13 +40,11 @@ test("should call the loaderContext callback with the expected context and argum
     const args = [1, 2, 3, 4, 5, 6];
     const context = mockContext({
         query: {
-            callback() {}
-        }
+            callback() {},
+        },
     });
 
-    context.callback = function () {
-        const actualArgs = Array.from(arguments);
-
+    context.callback = function (...actualArgs) {
         t.is(this, context);
         t.is(actualArgs[0], null);
         t.deepEqual(args, actualArgs.slice(1));
@@ -61,10 +62,10 @@ test("should callback the query callback with inspectable arguments", t => {
             t.deepEqual(inspect.arguments, args);
             t.is(inspect.context, context);
             t.is(inspect.options, options);
-        }
+        },
     };
     const context = mockContext({
-        query: options
+        query: options,
     });
 
     t.plan(3);
@@ -76,10 +77,10 @@ test("should also support string refs to previously registered callbacks", t => 
     const stringRef = "testCallback";
     const args = [1, 2, 3, 4, 5, 6];
     const options = {
-        callback: stringRef
+        callback: stringRef,
     };
     const context = mockContext({
-        query: options
+        query: options,
     });
 
     t.plan(3);
@@ -108,8 +109,8 @@ test("should throw a descriptive TypeError if an unknown callback string ref was
     const stringRef = "notRegistered";
     const context = mockContext({
         query: {
-            callback: "notRegistered"
-        }
+            callback: "notRegistered",
+        },
     });
 
     const err = t.throws(() => {
@@ -117,7 +118,7 @@ test("should throw a descriptive TypeError if an unknown callback string ref was
     });
 
     t.true(err instanceof TypeError);
-    t.is(err.message, `Expected the registered callback "${ stringRef }" to be typeof "function", instead of "undefined".`);
+    t.is(err.message, `Expected the registered callback "${stringRef}" to be typeof "function", instead of "undefined".`);
 });
 
 test("should also work with webpack's loader context", t => {
@@ -125,15 +126,17 @@ test("should also work with webpack's loader context", t => {
     const options = {
         callback(i) {
             inspect = i;
-        }
+        },
     };
 
     t.plan(5);
 
-    return compile([{
-        loader: pathToInspectLoader,
-        options
-    }])
+    return compile([
+        {
+            loader: pathToInspectLoader,
+            options,
+        },
+    ])
         .then(() => {
             t.truthy(inspect.arguments);
             t.deepEqual(inspect.arguments, [entryContent]);
@@ -150,28 +153,30 @@ test("should be possible to inspect multiple times", t => {
     let inspect1;
     let inspect2;
     let inspect3;
-    const options = [{
-        callback(i) {
-            inspect1 = i;
-            loaderIndices[0] = i.context.loaderIndex;
-        }
-    }, {
-        callback(i) {
-            inspect2 = i;
-            loaderIndices[1] = i.context.loaderIndex;
-        }
-    }, {
-        callback(i) {
-            inspect3 = i;
-            loaderIndices[2] = i.context.loaderIndex;
-        }
-    }];
+    const options = [
+        {
+            callback(i) {
+                inspect1 = i;
+                loaderIndices[0] = i.context.loaderIndex;
+            },
+        }, {
+            callback(i) {
+                inspect2 = i;
+                loaderIndices[1] = i.context.loaderIndex;
+            },
+        }, {
+            callback(i) {
+                inspect3 = i;
+                loaderIndices[2] = i.context.loaderIndex;
+            },
+        },
+    ];
 
-    t.plan(1 + options.length * 4);
+    t.plan(1 + (options.length * 4));
 
     return compile(options.map(options => ({
         loader: pathToInspectLoader,
-        options
+        options,
     })))
         .then(() => {
             t.deepEqual(loaderIndices, [0, 1, 2]);
